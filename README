@@ -1,0 +1,198 @@
+# MinuteVault
+
+**Secure Digital Meeting Minutes Creation, Approval & Verification System**
+
+A comprehensive security-focused application for managing meeting minutes with encryption, digital signatures, multi-factor authentication, and access control.
+
+![MinuteVault](https://img.shields.io/badge/Security-AES--256--GCM-blue)
+![MinuteVault](https://img.shields.io/badge/Signatures-RSA--PSS-green)
+![MinuteVault](https://img.shields.io/badge/Auth-TOTP%20MFA-orange)
+
+## 📁 Repository Structure
+
+```
+minute-vault/
+├── frontend/          # React + Vite frontend
+├── backend/           # Node.js + Express API
+└── README             # This file
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm
+
+### Backend Setup
+
+```bash
+cd backend
+
+# Install dependencies
+npm install
+
+# Generate Prisma client and run migrations
+npx prisma generate
+npx prisma migrate dev --name init
+
+# Start development server
+npm run dev
+```
+
+Backend runs on **http://localhost:3001**
+
+### Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+Frontend runs on **http://localhost:5173**
+
+---
+
+## 🔐 Security Features (Rubric Mapping)
+
+### Authentication (3 marks)
+| Feature | Implementation |
+|---------|----------------|
+| **Single-factor** | bcrypt (cost 12) password hashing with JWT tokens |
+| **Multi-factor** | TOTP via speakeasy with QR code setup |
+
+### Authorization (3 marks)
+| Feature | Implementation |
+|---------|----------------|
+| **ACL Model** | Database table with subjects, objects, rights |
+| **Policy** | Owner/Admin can manage, Approvers can approve, Readers can view |
+| **Enforcement** | Middleware checks on every API request |
+
+### Encryption (3 marks)
+| Feature | Implementation |
+|---------|----------------|
+| **Key Exchange** | RSA-2048 keypair per user, PBKDF2 key derivation |
+| **Encryption** | AES-256-GCM for content, RSA-OAEP key wrapping |
+
+### Hashing & Signatures (3 marks)
+| Feature | Implementation |
+|---------|----------------|
+| **Password Hashing** | bcrypt with automatic salt |
+| **Digital Signatures** | RSA-PSS + SHA-256 for minutes & approvals |
+
+### Encoding (3 marks)
+| Feature | Implementation |
+|---------|----------------|
+| **Base64** | All binary data encoded in Base64 |
+| **QR Codes** | Verification URLs encoded as QR codes |
+
+---
+
+## 🛡️ Security Notes
+
+### Confidentiality
+- Minutes encrypted with AES-256-GCM before storage
+- Only authorized users receive wrapped decryption keys
+- Private keys encrypted with password-derived keys
+
+### Integrity
+- RSA-PSS signatures on all minutes
+- GCM authentication tags prevent tampering
+- Content fingerprints (SHA-256) for verification
+
+### Availability
+- Rate limiting prevents DoS attacks
+- SQLite database with file-based backup
+- Stateless JWT authentication
+
+### Threat Mitigations
+| Threat | Mitigation |
+|--------|------------|
+| Stolen Database | Content encrypted, private keys encrypted |
+| MITM Attack | HTTPS in production, JWT short expiry |
+| Replay Attack | TOTP with time window, JWT expiry |
+| Compromised Key | Per-user keypairs, password-protected |
+| Brute Force | Rate limiting, bcrypt cost factor |
+
+---
+
+## 📋 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Create account with RSA keypair
+- `POST /api/auth/login` - Single-factor login
+- `POST /api/auth/mfa/setup` - Generate TOTP QR code
+- `POST /api/auth/mfa/verify` - Enable MFA
+- `POST /api/auth/login/mfa` - Complete MFA login
+
+### Meetings
+- `GET /api/meetings` - List accessible meetings
+- `POST /api/meetings` - Create meeting with participants
+- `GET /api/meetings/:id` - Meeting details
+
+### Minutes
+- `POST /api/minutes/meeting/:id` - Create encrypted minutes
+- `GET /api/minutes/:id` - Get encrypted minutes
+- `POST /api/minutes/:id/decrypt` - Decrypt with password
+- `POST /api/minutes/:id/approve` - Submit signed approval
+- `GET /api/minutes/:id/verify` - Public verification
+
+### ACL
+- `GET /api/acl/:type/:id` - View access control list
+- `POST /api/acl` - Create/update ACL entry
+
+---
+
+## 🧪 Testing Checklist
+
+### Authentication
+- [ ] Register new user (verify RSA keypair generated)
+- [ ] Login with password only
+- [ ] Setup MFA with QR code
+- [ ] Login with password + TOTP code
+
+### Authorization
+- [ ] View ACL matrix for a meeting
+- [ ] Verify unauthorized user cannot access minutes
+- [ ] Add user to ACL and verify access granted
+
+### Encryption & Signatures
+- [ ] Create minutes (verify encrypted in DB)
+- [ ] Decrypt minutes with correct password
+- [ ] Verify signature displays as valid
+- [ ] Scan QR code to reach verification page
+
+### Complete Flow
+1. Register User A and User B
+2. User A enables MFA
+3. User A creates meeting, adds B as read-only
+4. User A uploads minutes (encrypted + signed)
+5. User B decrypts and views minutes
+6. User A approves minutes (signed approval)
+7. Verify minutes shows valid signatures
+
+---
+
+## 📚 Tech Stack
+
+- **Backend**: Node.js, Express, Prisma, SQLite
+- **Frontend**: React, Vite, React Router
+- **Security**: bcrypt, jsonwebtoken, speakeasy, crypto (Node.js)
+- **UI**: Custom CSS with dark theme & glassmorphism
+
+---
+
+## 👨‍🏫 Viva Preparation
+
+Key points to demonstrate:
+1. **bcrypt** - Show password hash format, explain salt
+2. **TOTP** - Demonstrate QR scan, explain time-based codes
+3. **RSA Keypair** - Show public key storage, encrypted private key
+4. **AES-256-GCM** - Explain hybrid encryption flow
+5. **RSA-PSS** - Show signature verification on minutes
+6. **ACL** - Demonstrate permission denied for unauthorized user
+7. **QR Verification** - Scan code, show verification page
