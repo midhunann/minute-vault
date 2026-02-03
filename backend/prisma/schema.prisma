@@ -1,0 +1,108 @@
+// Prisma schema for Minute Vault
+// Secure Meeting Minutes with encryption, signatures, and ACL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String   @id @default(uuid())
+  name                  String
+  email                 String   @unique
+  passwordHash          String
+  totpSecret            String?
+  totpEnabled           Boolean  @default(false)
+  publicKeyPem          String
+  encryptedPrivateKey   String
+  privateKeySalt        String
+  privateKeyIv          String
+  privateKeyTag         String
+  role                  String   @default("user") // admin, user, approver
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  meetingsCreated       Meeting[]
+  minutesCreated        Minutes[]
+  wrappedKeys           WrappedKey[]
+  approvalsGiven        Approval[]
+  aclSubject            ACL[]     @relation("ACLSubject")
+}
+
+model Meeting {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  minutes     Minutes[]
+}
+
+model Minutes {
+  id               String   @id @default(uuid())
+  meetingId        String
+  meeting          Meeting  @relation(fields: [meetingId], references: [id])
+  createdById      String
+  createdBy        User     @relation(fields: [createdById], references: [id])
+  encryptedBlob    String   // Base64 encoded AES-encrypted content
+  iv               String   // Initialization vector for AES
+  authTag          String   // GCM authentication tag
+  signature        String   // RSA-PSS signature of original content
+  verificationCode String   @unique // Unique code for verification URL/QR
+  status           String   @default("pending") // pending, approved, rejected
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  wrappedKeys      WrappedKey[]
+  approvals        Approval[]
+}
+
+model WrappedKey {
+  id         String  @id @default(uuid())
+  minutesId  String
+  minutes    Minutes @relation(fields: [minutesId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
+  wrappedKey String  // RSA-encrypted AES key (Base64)
+
+  @@unique([minutesId, userId])
+}
+
+model ACL {
+  id          String @id @default(uuid())
+  subjectId   String
+  subject     User   @relation("ACLSubject", fields: [subjectId], references: [id])
+  subjectRole String? // Alternative: role-based (admin, approver, etc.)
+  objectType  String // meeting, minutes, approval
+  objectId    String
+  rights      String // comma-separated: read,write,approve,delete
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([subjectId, objectType, objectId])
+}
+
+model Approval {
+  id         String   @id @default(uuid())
+  minutesId  String
+  minutes    Minutes  @relation(fields: [minutesId], references: [id])
+  approverId String
+  approver   User     @relation(fields: [approverId], references: [id])
+  status     String   // approved, rejected
+  comment    String?
+  signature  String   // Digital signature of approval
+  createdAt  DateTime @default(now())
+
+  @@unique([minutesId, approverId])
+}
