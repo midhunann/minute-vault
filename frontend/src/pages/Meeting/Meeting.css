@@ -1,0 +1,338 @@
+.create-meeting-page .page-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.create-meeting-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .create-meeting-container {
+        grid-template-columns: 1fr;
+    }
+
+    .info-section {
+        order: -1;
+    }
+}
+
+.form-section {
+    animation: fadeIn 0.5s ease;
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-accent);
+    border-radius: var(--radius-md);
+    color: var(--dark-900);
+    flex-shrink: 0;
+}
+
+.section-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.section-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.section-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Participants */
+.participants-section h3 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.participant-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.participant-form .form-select {
+    flex: 1;
+}
+
+.participant-form .rights-select {
+    flex: 0 0 160px;
+}
+
+.participants-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.participant-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--dark-700);
+    border-radius: var(--radius-md);
+}
+
+.participant-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.participant-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.participant-email {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.participant-rights {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+    margin-top: var(--spacing-xl);
+}
+
+/* Info section */
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    position: sticky;
+    top: 100px;
+}
+
+.info-card {
+    padding: var(--spacing-lg);
+}
+
+.info-card h4 {
+    margin-bottom: var(--spacing-md);
+    font-size: 0.95rem;
+}
+
+.info-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.info-card li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-left: var(--spacing-md);
+    position: relative;
+}
+
+.info-card li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-cyan);
+}
+
+/* Meeting Detail Page */
+.meeting-detail-page .page-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.meeting-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.meeting-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.meeting-info h1 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.meeting-info .meeting-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    max-width: 600px;
+}
+
+.meeting-info .meeting-meta {
+    display: flex;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.meeting-info .meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.meeting-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Meeting content */
+.meeting-content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .meeting-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.minutes-section h2,
+.participants-section h2 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Minutes list */
+.minutes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.minutes-item {
+    display: block;
+    padding: var(--spacing-lg);
+    text-decoration: none;
+}
+
+.minutes-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.minutes-number {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.minutes-item-info {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.minutes-item-info span {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.minutes-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.approvals-count {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.empty-minutes {
+    text-align: center;
+    padding: var(--spacing-2xl);
+}
+
+.empty-minutes svg {
+    color: var(--primary-400);
+    margin-bottom: var(--spacing-lg);
+}
+
+.empty-minutes h3 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-minutes p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-secondary);
+}
+
+/* Participants card */
+.participants-card {
+    padding: var(--spacing-lg);
+}
+
+.participants-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.participant-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.participant-avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-accent);
+    border-radius: 50%;
+    color: var(--dark-900);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.participant-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.participant-badges {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+}
